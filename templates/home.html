@@ -1,0 +1,423 @@
+{% extends "includes/userbase.html" %}
+{% load static %}
+{% block content %}
+    <div id="carouselExampleIndicators" style="margin-top: 10vh;" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="{% static 'peakpxburger.jpg'%}" class="d-block w-100 my-carousel" alt="...">
+            <h3 class="my-carousel-text">Zinger Burger</h3>
+            <p><a class="btn btn-lg btn-success my-btn-carousel" href="#shop">Shop Now</a></p>
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'peakpxburger.jpg' %}" class="d-block w-100 my-carousel" alt="...">
+            <h3 class="my-carousel-text">Zinger Burger</h3>
+            <p><a class="btn btn-lg btn-success my-btn-carousel" href="#shop">Shop Now</a></p>
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'peakpxburger.jpg'%}" class="d-block w-100 my-carousel" alt="...">
+            <h3 class="my-carousel-text">Zinger Burger</h3>
+            <p><a class="btn btn-lg btn-success my-btn-carousel" href="#shop">Shop Now</a></p>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <center>
+      {% for message  in messages %}
+      <div class="container">
+        <p style="font-size: larger;"><strong>{{message}}</strong></p>
+      </div>
+      {% endfor %}
+    </center>
+    <!-- Shop Bar -->
+    <div class="container">
+        <div class="card my-shop-head-card">
+          <div class="card-body">
+            <blockquote style="margin-left: 3vw;" class="blockquote mb-0">
+              <i style="color: #7db253; margin-top: 1vh; float: left;" class="fas fa-shopping-cart"></i>
+              <p style="margin-left: 2vw;">Shop</p>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+      <!-- !Shop Bar -->
+
+      <!-- Shop Side Bars -->
+      <div class="container">
+        <div class="row justify-content-md-center">
+
+          <div class="col-md-3">
+            <div class="card my-shop-side-card">
+                <div class="card-body">
+                  <blockquote style="margin-left: 3vw;" class="blockquote mb-0">
+                    <i style="color: #7db253; margin-top: 1vh; float: left;" class="fas fa-book"></i>
+                    <p style="margin-left: 2vw;;">Categories</p>
+                  </blockquote>
+                  <div style="margin-top: 3vh;">
+                    <center>
+                      <hr>
+                      <div>
+                        <form action="" method="get">
+                          <input type="hidden">
+                          <input href="./index.php#shop" type="submit" value="All" class="my-category-list-btn">
+                        </form>
+                      </div>
+                      <div>
+                        <form action="" method="get">
+                          <input type="hidden" name="foodCategory" value="Burger">
+                          <input href="./index.php#shop" type="submit" value="Burger" name="foodName" class="my-category-list-btn">
+                        </form>
+                      </div>
+                      <div>
+                      <form action="" method="get">
+                          <input type="hidden" name="foodCategory" value="Pizza">
+                          <input href="./index.php#shop" type="submit" value="Pizza" name="foodName" class="my-category-list-btn">
+                        </form>
+                      </div>
+                      <div>
+                        <form action="" method="get">
+                          <input type="hidden" name="foodCategory" value="Shawarma">
+                          <input href="./index.php#shop" type="submit" value="Shawarma" name="foodName" class="my-category-list-btn">
+                        </form>
+                      </div>
+                      <div>
+                        <form action="" method="get">
+                          <input type="hidden" name="foodCategory" value="Fried Chicken">
+                          <input href="./index.php#shop" type="submit" value="Fried Chicken" name="foodName" class="my-category-list-btn">
+                        </form>
+                      </div>
+                      <div>
+                        <form action="" method="get">
+                          <input type="hidden" name="foodCategory" value="Juices">
+                          <input href="./index.php#shop" type="submit" value="Juices" name="foodName" class="my-category-list-btn">
+                        </form>
+                      </div>
+                    </center>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <div class="col-md-1"></div>
+
+          <div class="col-md-8" style="margin-top: 5vh;">
+            <!-- search bar -->
+            <div  id="shop" class="card my-shop-head-card">
+                <div class="card-body">
+                  <center>
+                    <div class="my-search-container">
+                      <form action="" method="GET">
+                        <input class="my-search-container-input"  type="text" placeholder="Search.." name="search">
+                        <button class="my-btn-search" name="searchSubmit" type="submit"><i class="fa fa-search"></i></button>
+                      </form>
+                    </div>
+                  </center>
+                </div>
+            </div>
+            <!-- search bar -->
+
+            <!-- Food -->
+            <center>
+                <div class="row justify-content-md-center">
+                    {% for product in products %}
+                    <div class="col-md-6 col-lg-4 col-xl-3 col-sm-6 col-6" style="margin-top: 2vh;">
+                        <div class="card my-card">
+                            <div class="card-body">
+                                <img src="{{product.image.url}}" class="my-img mx-auto" alt="...">
+                                <p class="card-title fw-bold" style="text-align: left;">{{product.productname}}</p>
+                                <p style="float: left; font-weight: 500;" class="card-text"><i style="color: #7db253;" class="fas fa-rupee-sign"></i>{{product.price}}</p>
+                                <div class="my-cart-style">
+                                    <i style="color: white; margin-top: 1vh;" class="fas fa-shopping-cart" data-bs-toggle="modal" data-bs-target="#exampleModal{{product.id}}"></i>
+                                </div>
+                                <div class="">
+                                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>    
+            </center>
+            <!-- Food -->
+            
+          </div>
+        </div>
+      </div>
+    <!-- !Shop Side Bars -->
+
+    <!-- Modal -->
+    {% for product in products %}
+          <div class="modal fade" id="exampleModal{{product.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{product.productname}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <img src="{{product.image.url}}" alt="" style="width: 100%;">
+                    </div>
+                    <div class="col-md-6">
+                      <h4 name="productname">{{product.productname}}</h4>
+                      <p>{{product.description}}</p>
+                      <hr>
+                      <div class="row">
+                        <div class="col-md-6 col-6">
+                          <center>
+                            <h6>Price</h6>
+                            <p name="price"><i style="color: #7db253;" class="fas fa-rupee-sign"></i>{{product.price}}</p>
+                          </center>
+                        </div>
+                        <div class="col-md-6 col-6">
+                          <center>
+                            <h6>Quantity</h6>
+                            <div class="my-Inc-Dec-Box">
+                              <span><button class="my-btn-Inc-Dec" onclick="myFunctionMinus('{{product.id}}')">-</button></span>
+                              <span><input style="border: none; text-align: center; background: white; width: 20px;" type="number" name="qty" id="myNumber{{product.id}}" value="1" min="1" max="9" oninput="myQuantity()"></span>
+                              <span><button class="my-btn-Inc-Dec" onclick="myFunctionPlus('{{product.id}}')">+</button></span>
+                            </div>
+                          </center>
+                        </div>
+                      </div>
+                      <center>
+                        {% if sessions %}
+                        <form style="display:inline-block;" action="buy" method="POST" e  nctype="multipart/form-data">
+                          {% csrf_token %}
+                          <input type="hidden" name="ProductName" value="{{product.productname}}" >
+                          <input type="hidden" name="Category" value="{{product.category}}" >
+                          <textarea name="Quantity" id="output{{product.id}}" hidden>1</textarea>
+                          <input type="hidden" name="Price" value="{{product.price}}" >
+                          <input type="hidden" name="User" value="{{sessions.id}}" >
+                          <button type="submit" class="btn btn-sm btn-success my-btn-modal"><i class="fas fa-shopping-cart"></i> Buy Now</button>
+                        </form>
+                        <form style="display:inline-block;" enctype="multipart/form-data">
+                          <textarea name="Quantity" id="cartoutput{{product.id}}" hidden>1</textarea>
+                          <button type="button" onclick="addtocartSubmit('{{product.id}}','{{product.productname}}','{{product.category}}','{{product.price}}','{{sessions.id}}')" name="addToCart" class="btn btn-sm btn-light my-btn-modal"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                        </form>
+                        <!-- <div style="margin-top: 2vh;">
+                            <a href="buy" class="btn btn-sm btn-success my-btn-modal"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                            <a href="addtocart" class="btn btn-sm btn-light my-btn-modal"><i class="fas fa-cart-plus"></i> Add to Cart</a>       
+                        </div> -->
+                        {% else %}
+                        <div style="margin-top: 2vh;">
+                            <a href="login" class="btn btn-sm btn-success my-btn-modal"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                            <a href="login" class="btn btn-sm btn-light my-btn-modal"><i class="fas fa-cart-plus"></i> Add to Cart</a>       
+                        </div> 
+                        {% endif %} 
+                      </center>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary my-btn-modal" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        
+        {% endfor %}
+        <!-- Modal --> 
+
+        <!-- Contact Form -->
+<div class="container" id="contactus">
+  <div class="card my-contact-form">
+    <div class="card-body">
+      <div class="container">
+        <h2 style="padding-top: 2vh;"><i style="margin-right: 1vw; color:#7db253 ;" class="fas fa-address-book"></i>Contact Us</h2>
+        <form action="comments" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3">
+            <div class="row">
+              <div class="col-md-4">
+                <label for="exampleInputEmail1" class="form-label">Name</label>
+                <input type="text" class="form-control" name="name" required>
+                <div id="emailHelp" class="form-text">We'll never share your name with anyone else.</div>
+              </div>
+              <div class="col-md-4">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+              </div>
+              <div class="col-md-4">
+                <label for="exampleInputEmail1" class="form-label">Phone Number</label>
+                <input type="text" class="form-control" name="phone" required>
+                <div id="emailHelp" class="form-text">We'll never share your Phone Number with anyone else.</div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+              <span class="input-group-text">Comment</span>
+              <textarea class="form-control" name="comment" aria-label="With textarea" style="height: 30vh;" required></textarea>
+              <input type="hidden" name="user" value="{{sessions.username}}">
+            </div>
+          </div>
+          {% if sessions %}
+              <button onclick="alert('Thanks for your valuable comment')" type="submit" name="upload" class="btn btn-success my-btn-signin">Submit</button>
+          {% else %}
+          <a href="signup/login.php" type="submit" class="btn btn-success my-btn-signin">Submit</a>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- !Contact Form -->
+
+<!-- Footer -->
+<footer class="pt-4 my-footer">
+
+  <!-- Footer Elements -->
+  <div class="container">
+    {% if sessions %}
+      <!-- Call to action -->
+      <ul class="list-inline text-center py-2">
+        <li class="list-inline-item">
+          <h5 class="mb-1" style="color: white;">Click Here to</h5>
+        </li>
+        <li class="list-inline-item">
+          <a href="logout" class="btn btn-light" style="color: green;"><strong>Logout</strong></a>
+        </li>
+      </ul>
+      <!-- Call to action -->
+    {% else %}
+      <!-- Call to action -->
+      <ul class="list-inline text-center py-2">
+        <li class="list-inline-item">
+          <h5 class="mb-1" style="color: white;">Register for free</h5>
+        </li>
+        <li class="list-inline-item">
+          <a href="register" class="btn btn-light" style="color: green;"><strong>Sign up!</strong></a>
+        </li>
+      </ul>
+      <!-- Call to action -->
+    {% endif %}
+  
+  </div>
+  <!-- Footer Elements -->
+  
+  <!-- Footer links -->
+    <div class=" my-footer-copyright">
+  
+      <hr>
+  
+      <!-- Grid row -->
+      <div class="row align-items-center" style="width: 100%;">
+        <!-- Grid column -->
+        <div class="col-md-7 col-lg-8">
+  
+          <!--Copyright-->
+          <p class="text-center text-md-left">© 2021 Copyright:
+            <a href="#" style="color: green;">
+              <strong>farmeats.com</strong>
+            </a>
+          </p>
+  
+        </div>
+        <!-- Grid column -->
+  
+        <!-- Grid column -->
+        <div class="col-md-5 col-lg-4 ml-lg-0">
+  
+          <!-- Social buttons -->
+          <div class="text-center text-md-right">
+            <ul class="list-unstyled list-inline">
+              <li class="list-inline-item">
+                <a class="btn-sm mx-1 my-btn-socialIcons">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a class="btn-sm mx-1 my-btn-socialIcons">
+                  <i class="fab fa-instagram"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a class="btn-sm mx-1 my-btn-socialIcons">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+  
+        </div>
+        <!-- Grid column -->
+  
+      </div>
+      <!-- Grid row -->
+  
+    </div>
+  <!-- Footer Links -->
+  </footer>
+  <!-- !Footer -->
+        
+        
+        <center>
+            <div>
+                <a href="adminHome" class="btn btn-light">Admin Panel</a>
+            </div>
+        </center>
+
+        <script>
+            function myFunctionMinus(intVal) {
+                document.getElementById('myNumber'+intVal).stepDown();
+                var x = document.getElementById('myNumber'+intVal).value;
+                document.getElementById('output'+intVal).innerHTML = x;
+                document.getElementById('cartoutput'+intVal).innerHTML = x;
+            }
+            function myFunctionPlus(intVal) {
+                document.getElementById('myNumber'+intVal).stepUp();
+                var x = document.getElementById('myNumber'+intVal).value;
+                document.getElementById('output'+intVal).innerHTML = x;
+                document.getElementById('cartoutput'+intVal).innerHTML = x;
+            }
+
+            function addtocartSubmit(intVal,pdtname, pdtcategory, pdtprice, pdtuser){
+                  var productname = pdtname
+                  var category = pdtcategory
+                  var quantity = $('#cartoutput'+intVal).val()
+                  var price = pdtprice
+                  var user = pdtuser
+                  var pdtId = intVal
+                  console.log(user)
+                  var data = {
+                    'csrfmiddlewaretoken' : '{{csrf_token}}',
+                    'productname' : productname,
+                    'category' : category,
+                    'quantity' : quantity,
+                    'price' : price,
+                    'user' : user,
+                    'pdtId' : pdtId
+                  }
+                  $.ajax({
+                      url:'/',
+                      method:'POST',
+                      data: data,
+                      dataType: 'json',
+                      success:function(data){
+                        if(data.success){
+                          document.getElementById('badgeVal').innerHTML = data.cartTotal;
+                          alert("Item added to the cart")
+                        }else{
+                          alert("Admin is not authenticated")
+                        }
+                      }
+                    })
+            }
+        </script>
+        {% endblock %}
+
+        

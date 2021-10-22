@@ -1,0 +1,51 @@
+{% extends "includes/userbase.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-8">
+        <br>
+<br>
+            <h2 id="orders" class="">My Orders</h2>
+          </div>
+          <div class="col-md-4">
+            <br>
+            <br>
+            <form action="">
+                  <input type="hidden" name="user" value="{{orders.name}}">
+                  <button class="btn btn-success" type="submit">Print Invoice</button>
+                  <p><i>Note: Only Not Delivered items invoice will be printed</i></p>
+            </form>
+        </div>
+    </div>
+  <div class="row">
+      {% for orders in AllOrders%}
+                  <div class="col-md-4 col-6 mt-5">
+                      <div class="card w-100" style="border-radius:20px; border:none; box-shadow: 0 4px 89px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                          <div class="card-body">
+                              <h5 class="card-title" style="color:green"><strong>{{orders.name}} - {{orders.products}} x {{orders.quantity}}</strong></h5>
+                              <hr>
+                              <p class="card-text"><strong>Product Name: </strong>{{orders.products}}</p>
+                              <p class="card-text"><strong>Quantity: </strong>{{orders.quantity}}</p>
+                              <p class="card-text"><strong>Price: </strong>{{orders.price}}</p>
+                              <hr>
+                              <p class="card-text"><strong>Name: </strong>{{orders.name}}</p>
+                              <p class="card-text"><strong>Phone Number: </strong>{{orders.phone}}</p>
+                              <p class="card-text"><strong>Address: </strong>{{orders.address}}</p>
+                              <p class="card-text"><strong>Address2: </strong>{{orders.address2}}</p>
+                              <p class="card-text"><strong>District: </strong>{{orders.district}}</p>
+                              <p class="card-text"><strong>Zip: </strong>{{orders.zip}}</p>
+                              <p class="card-text"><strong>Payment Method: </strong>{{orders.paymentMethod}}</p>
+                              
+                                  <button class="card-text btn btn-danger" style="border-radius:20px;"><strong>Delivery: </strong>{{orders.delivery}}</button>
+                                  <form action='' method="POST">
+                                        <input type="hidden" name="SI" value="{{orders.id}}">
+                                        <input class="btn btn-warning mt-4" type="submit" name="myOrderDlte" value="Delete" style="border-radius: 10px; color:white">
+                                  </form> 
+                          </div>
+                      </div>
+                  </div>
+        {% endfor %}
+  </div>
+</div>
+{% endblock %}

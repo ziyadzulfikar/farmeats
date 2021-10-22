@@ -1,0 +1,112 @@
+{% extends "includes/userbase.html" %}
+{% load static %}
+{% block content %}
+    <input type="hidden" id="name" value="{{name}}">
+    <input type="hidden" id="phone" value="{{phone}}">
+    <input type="hidden" id="address" value="{{address}}">
+    <input type="hidden" id="address2" value="{{address2}}">
+    <input type="hidden" id="district" value="{{district}}">
+    <input type="hidden" id="zip" value="{{zip}}">
+    <input type="hidden" id="paymentMethod" value="{{paymentMethod}}">
+    <input type="hidden" id="products" value="{{products}}">
+    <input type="hidden" id="quantity" value="{{quantity}}">
+    <input type="hidden" id="price" value="{{price}}">
+    <input type="hidden" id="category" value="{{category}}">
+    <input type="hidden" id="userId" value="{{userId}}">
+    <input type="hidden" id="delivery" value="{{delivery}}">
+    <input type="hidden" id="date" value="{{date}}">
+    <center>
+        <div class="container mt-5">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4" style="margin-top: 40vh;">
+                <!-- Set up a container element for the button -->
+                <div id="paypal-button-container"></div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+
+    </center>
+    
+
+    <!-- Include the PayPal JavaScript SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AfgsLPtzZjVM5djHrRRm4JGx1Q6UQWuSTThqI0fwagzavcxXjCW2RwrtxXm14x30z3e6NOW6LHPqKucP&currency=USD"></script>
+
+    <script>
+        // Render the PayPal button into #paypal-button-container
+        paypal.Buttons({
+
+            // Set up the transaction
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '{{totalPrice}}'
+                        }
+                    }]
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(orderData) {
+                    // Successful capture! For demo purposes:
+                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                    //var transaction = orderData.purchase_units[0].payments.captures[0];
+                    //alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+
+                    // Replace the above to show a success message within this page, e.g.
+                    //const element = document.getElementById('paypal-button-container');
+                    //element.innerHTML = '';
+                    //element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                    var name = $('#name').val()
+                    var phone = $('#phone').val()
+                    var address = $('#address').val()
+                    var address2 = $('#address2').val()
+                    var district = $('#district').val()
+                    var zip = $('#zip').val()
+                    var paymentMethod = $('#paymentMethod').val()
+                    var products = $('#products').val()
+                    var quantity = $('#quantity').val()
+                    var price = $('#price').val()
+                    var category = $('#category').val()
+                    var userId = $('#userId').val()
+                    var delivery = $('#delivery').val()
+                    var date = $('#date').val()
+                    var data = {
+                        'csrfmiddlewaretoken' : '{{csrf_token}}',
+                        'name' : name,
+                        'phone' : phone,
+                        'address' : address,
+                        'address2' : address2,
+                        'district' : district,
+                        'zip' : zip,
+                        'paymentMethod' : paymentMethod,
+                        'products' : products,
+                        'quantity' : quantity,
+                        'price' : price,
+                        'category' : category,
+                        'userId' : userId,
+                        'delivery' : delivery,
+                        'date' : date
+                      }
+                      $.ajax({
+                          url:'/thankyou',
+                          method:'POST',
+                          data: data,
+                          dataType: 'json',
+                          success:function(data){
+                            if(data.success){
+                              window.location.replace("/");
+                            }else{
+                              alert("Admin is not authenticated")
+                            }
+                          }
+                        })
+                });
+            }
+
+
+        }).render('#paypal-button-container');
+    </script>
+    {% endblock %}

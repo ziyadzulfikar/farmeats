@@ -1,0 +1,97 @@
+{% extends "includes/userbase.html" %}
+{% block content %}
+<div class="my-background">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8 mt-5">
+              {% for message  in messages %}
+                <p><strong>{{message}}</strong></p>
+              {% endfor %}
+                <form class="my-form" action="login" method="POST">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="mb-3 pt-4">
+                          <h3 class="text-success">Signin</h3>
+                        </div>
+                        <div class="mb-3">
+                          <label for="exampleInputEmail1" class="form-label">Email address</label>
+                          <input type="text" name="username" class="form-control" id="username" aria-describedby="emailHelp" required>
+                          <div id="textError" style="color: red; font-style: italic; display: none;" class="pb-1">*Enter minimum 4 characters</div>
+                        </div>
+                        <div class="mb-3">
+                          <label for="exampleInputPassword1" class="form-label">Password</label>
+                          <input type="password" name="password" class="form-control" id="password" required>
+                          <div id="passError" style="color: red; font-style: italic; display: none;" class="pb-1">*Enter minimum 4 characters</div>
+                        </div>
+                        
+                        <!-- <button type="submit" class="btn btn-danger mt-3 mb-4">Signin</button> -->
+                        <button type="button" id="btnSubmit" class="btn btn-success mt-3 mb-4">Signin</button>
+                        <a href="register" class="btn btn-primary mt-3 mb-4" type="button">Signup</a>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  $(document).ready(()=>{
+    $('#username').blur(function(){
+      var text = $(this).val()
+      if(/^[a-zA-Z0-9- ]*$/.test(text) == false) {
+          alert('Your username contains illegal characters.');
+      }
+      if(text.length<4){
+        $("#textError").show()
+      }else{
+        $("#textError").hide()
+      }
+  }),
+  $('#password').blur(function(){
+    var pass = $(this).val()
+    if(pass.length<4){
+      $("#passError").show()
+    }else{
+      $("#passError").hide()
+    }
+  }),
+    $('#btnSubmit').click(()=>{
+      var username = $('#username').val()
+      var password = $('#password').val()
+      console.log(username,password)
+      var data = {
+        'csrfmiddlewaretoken' : '{{csrf_token}}',
+        'username' : username,
+        'password' : password
+      }
+      
+      if(username == '' && password == ''){
+        alert("Please enter username and password")
+        $('#textError').show()
+      }else if(username == ''){
+        alert("Please enter username")
+      }else if(password == ''){
+        alert("Please enter password")
+      }else{
+        $.ajax({
+          url:'login',
+          method:'POST',
+          data: data,
+          dataType: 'json',
+          success:function(data){
+            if(data.success){
+              alert("User logged in")
+              window.location.replace('/')
+            }else{
+              alert("User is not authenticated")
+            }
+          }
+        })
+      }
+    })
+  })
+</script>
+{% endblock %}

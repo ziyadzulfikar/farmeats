@@ -1,0 +1,236 @@
+.my-background{
+    background: rgb(204, 255, 202);
+    height: 100vh;
+    width: 100%;
+}
+.my-form{
+    box-shadow: 0 4px 89px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 20px;
+    background-color: white;
+}
+.my-nav-shadow{
+    box-shadow: 0 4px 89px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.my-logo-size{
+    width: 5vh;
+    margin: 1vh;
+}
+.my-btn-signin{
+    border-radius: 20px;
+}
+.my-nav-links{
+  color: black !important;
+}
+.my-nav-links:hover{
+  color: #7db253 !important;
+}
+
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+  /* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+    margin-bottom: 4rem;
+  }
+  /* Since positioning the image, we need to help out the caption */
+  .carousel-caption {
+    bottom: 3rem;
+    z-index: 10;
+  }
+  
+  /* Declare heights because of positioning of img element */
+  .carousel-item {
+    height: 32rem;
+  }
+  .carousel-item > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    height: 32rem;
+  }
+
+  .my-carousel{
+    z-index: -1;
+  }
+  .my-btn-carousel{
+    z-index: 1;
+    margin-top: 3vh;
+    margin-left: 10vw;
+  }
+  .my-carousel-text{
+    padding-top: 40vh; 
+    margin-left: 10vw;
+    color: white;
+  }
+  .my-shop-head-card{
+    font-weight: bold;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 4px 89px 0 rgba(155, 155, 155, 0.2), 0 6px 20px 0 rgba(163, 163, 163, 0.19);
+  }
+  .my-shop-side-card{
+    font-weight: bold;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 89px 0 rgba(155, 155, 155, 0.2), 0 6px 20px 0 rgba(163, 163, 163, 0.19);
+    margin-top: 5vh;
+    height: 50vh;
+  }
+  .my-img{
+    height: 18vh;
+    width: 90%;
+    margin-top: 1vh;
+    border-radius: 10px;
+}
+.my-cart-style{
+    float: right; 
+    background-color: #f2ad42; 
+    border-radius: 20px; 
+    width: 2rem; 
+    height: 2rem; 
+    text-align: center; 
+    cursor: pointer;
+}
+.my-cart-style:hover{
+    background-color: green;
+    transition: 1s;
+}
+.my-card{
+    width: 12rem; 
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 4px 8px 0 rgba(172, 172, 172, 0.2), 0 6px 20px 0 rgba(170, 170, 170, 0.19);
+}
+.my-card:hover{
+    transform: scale(1.03);
+    transition: 0.5s;
+}
+.my-contact-form{
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px 89px 0 rgba(155, 155, 155, 0.2), 0 6px 20px 0 rgba(163, 163, 163, 0.19);
+  margin-top: 5vh;
+}
+.my-footer{
+  background: green;
+  margin-top: 5vh;
+}
+.my-footer-copyright{
+  color: white;
+  background: rgb(0, 88, 0);
+}
+.my-btn-socialIcons{
+  background: white;
+  border-radius: 100vw;
+  color: green;
+}
+.my-search-container{
+  width: 95%;
+  border: solid;
+  border-color: #7db253;
+  border-top-style: none;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: none;
+  border-radius: 50px;
+}
+.my-search-container:hover{
+  border-color: rgb(0, 83, 0);
+  transition: 1s;
+}
+.my-search-container:focus{
+  border-color: rgb(0, 83, 0);
+}
+.my-btn-search{
+  margin-left: 1vw;
+  border: none;
+  background: none;
+  color: green;
+}
+.my-btn-search:hover{
+  background: green;
+  height: 5vh;
+  width: 5vh;
+  border-radius: 50vh;
+  color: white;
+  transition: 1s;
+}
+.my-search-container-input{
+  color: green;
+  margin-left: 1vw;
+  width: 85%; 
+  height: 6vh; 
+  border: none; 
+  border-radius: 20px;
+}
+.my-search-container-input:focus{
+  outline: none;
+}
+
+/* Modal */
+.my-btn-modal{
+  border-radius: 10px;
+  transition: box-shadow 0.5s;
+}
+.my-btn-modal:hover{
+  box-shadow: 0 4px 89px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.my-Inc-Dec-Box{
+  width: fit-content; 
+  border-radius: 10px;
+  transition: box-shadow 0.5s;
+}
+.my-Inc-Dec-Box:hover{
+  box-shadow: 0 4px 89px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.my-btn-Inc-Dec{
+  border: none; 
+  border-radius: 10px; 
+  height: 30px; 
+  width: 30px; 
+  cursor: pointer;
+  font-size: medium;
+  transition: color 0.5s, background 0.5s;
+}
+.my-btn-Inc-Dec:hover{
+  color: white;
+  background: green;
+} 
+/* Modal */
+
+.my-category-list-btn{
+  height: 2.4rem;
+  font-weight: bold;  
+  width: 100%;
+  border: none;
+  background-color: white;
+  transition: background-color 0.5s, color 0.5s;
+  border-radius: 10px;
+}
+.my-category-list-btn:hover{
+  color: white;
+  background-color: green;
+}
+
+.checkout-box{
+  box-shadow: 0 4px 89px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  height: fit-content;
+  border-radius: 20px;
+}

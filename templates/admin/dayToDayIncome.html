@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- ERP Total Sales -->
+
+<div class="container mt-5">
+    <h1 id="stats">Stats</h1>
+    <h1>{{dayFrom}} <-> {{dayTo}} Sale</h1>
+      <div class="row">
+          <div class="col-md-6 col-12 col-sm-12">
+              <div id="piechart"></div>
+          </div>
+          <div class="col-md-6 col-12 col-sm-12">
+              <div id="piechartexpense"></div>
+          </div>
+      </div>
+
+
+      <div class="row">
+        <div class="mt-5" style="overflow: hidden;">
+      <!-- change height to increase the number of visible row  -->
+          <h3>Expenses</h3>
+          <table class="table table-hover" id="expense">
+              <thead class="table-success">
+                  <tr>
+                      <th>Date</th>
+                      <th>FoodItems</th>
+                      <th>Rent</th>
+                      <th>Electricity</th>
+                      <th>Total Salary</th>
+                      <th>Other Expenses</th>
+                      <th>Total Expenses</th>
+                      <th>Delete</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for expenses in allExpenses %}
+                    <tr>
+                        <td>{{expenses.CurrentDate}}</td>
+                        <td>{{expenses.FoodItems}}</td>
+                        <td>{{expenses.Rent}}</td>
+                        <td>{{expenses.Electricity}}</td>
+                        <td>{{expenses.TotalSalary}}</td>
+                        <td>{{expenses.OtherExpense}}</td>
+                        <td><strong>{{expenses.TotalExpense}}</strong></td>
+                        <td>
+                            <form action='dlteExpense' method="POST">
+                              {% csrf_token %}
+                                <input type="hidden" name="expenseId" value="{{expenses.id}}">
+                                <input class="btn btn-success" type="submit" name="expenseDlte" value="Delete" style="border-radius: 10px">
+                            </form>
+                        </td>
+                    </tr>
+                  {% endfor %}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td><strong>{{TotalGross}}</strong></td>
+                <td><strong>{{Rent}}</strong></td>
+                <td><strong>{{Electricity}}</strong></td>
+                <td><strong>{{TotalSalary}}</strong></td>
+                <td><strong>{{OtherExpense}}</strong></td>
+                <td><strong>{{TotalExpense}}</strong></td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>  
+      </div>
+      <div class="row">
+        <div class="mt-5" style="overflow: hidden;">
+        <h3>Total Income</h3>
+        <!-- change height to increase the number of visible row  -->
+            <table class="table table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th>Date</th>
+                        <th>ProductName</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for allOrders in TodayTotalIncome %}
+                        <tr>
+                            <td>{{allOrders.date}}</td>
+                            <td>{{allOrders.products}}</td>
+                            <td>{{allOrders.quantity}}</td>
+                            <td>{{allOrders.price}}</td>
+                            <td>
+                              <form action='dlteOrder' method="POST">
+                                {% csrf_token %}
+                                  <input type="hidden" name="orderId" value="{{allOrders.id}}">
+                                  <input class="btn btn-warning mt-4" type="submit" name="myOrderDlte" value="Delete" style="border-radius: 10px; color:white">
+                              </form>
+                            </td>
+                        </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td><strong>{{totalIncomeQuantity}}</strong></td>
+                    <td><strong>{{totalIncomeToday}}</strong></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+            </table>
+        </div>  
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mt-5" style="overflow: hidden;">
+              <h3>Total Gross Profit</h3>
+              <!-- change height to increase the number of visible row  -->
+                  <table class="table table-hover">
+                      <thead class="table-success">
+                          <tr>
+                              <th>Cost for Food Items</th>
+                              <th>Total Income</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{{TotalGross}}</td>
+                          <td>{{totalIncomeToday}}</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td><strong>Total Gross Profit</strong></td>
+                          <td><strong>{{TotalGrossProfit}}</strong></td>
+                        </tr>
+                      </tfoot>
+                  </table>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mt-5" style="overflow: hidden;">
+              <h3>Total Net Profit</h3>
+              <!-- change height to increase the number of visible row  -->
+                  <table class="table table-hover">
+                      <thead class="table-success">
+                          <tr>
+                              <th>Cost for Food Items</th>
+                              <th>Total Rent</th>
+                              <th>Electricity</th>
+                              <th>Total Salary</th>
+                              <th>Other Expenses</th>
+                              <th>Total Income</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{{TotalGross}}</td>
+                          <td>{{Rent}}</td>
+                          <td>{{Electricity}}</td>
+                          <td>{{TotalSalary}}</td>
+                          <td>{{OtherExpense}}</td>
+                          <td>{{totalIncomeToday}}</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td><strong>Total Net Profit</strong></td>
+                          <td><strong>{{TotalNetProfit}}</strong></td>
+                        </tr>
+                      </tfoot>
+                  </table>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-5 mb-5">
+          <h3 class="mb-3">Income by Categories</h3>
+          <div class="col-md-3">
+            <a href="yesterdayIncome" class="btn btn-success">Yesterdays Income</a>
+          </div>
+          <div class="col-md-3">
+            <a href="totalIncome" class="btn btn-success">Total Income Till Now</a>
+          </div>
+          <div class="col-md-3">
+            <form class="form-group" method="post" action="specificDayIncome">
+            {% csrf_token %}
+              <div class="row">
+                <div class="col-md-8">
+                  <input class="form-control" type="date" id="day" name="day">
+                </div>
+                <div class="col-md-4">
+                  <input class="btn btn-success" type="submit">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-3">
+            <form class="form-group" method="post" action="dayToDayIncome">
+            {% csrf_token %}
+              <div class="row">
+                <div class="col-md-8">
+                  <span>
+                  <label for="staticEmail2" class="sr-only">from</label>
+                    <input class="form-control" type="date" id="dayFrom" name="dayFrom" required>
+                  </span>
+                  <span>
+                  <label for="staticEmail2" class="sr-only">to</label>
+                    <input class="form-control" type="date" id="dayTo" name="dayTo" required>
+                  </span>
+                </div>
+                <div class="col-md-8">
+                  <input class="btn btn-success mt-4" name="dayToDay" type="submit">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>            
+      </div>
+  </div>
+
+  <!-- ERP Total Sales -->
+  
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  
+  <script type="text/javascript">
+  // Load google charts
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+  google.charts.setOnLoadCallback(drawChartExpense);
+  
+  // Draw the chart and set the chart values
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+    ['Food', 'Total Sale per food'],
+          
+          ['Burger', {{Burger}}],
+          ['Pizza', {{Pizza}}],
+          ['Shawarma', {{Shawarma}}],
+          ['FriedChicken', {{FriedChicken}}],
+          ['Juices', {{Juice}}],
+  //   ['Eat', 2],
+  //   ['TV', 4],
+  //   ['Gym', 2],
+  //   ['Sleep', 8]
+  ]);
+  
+    // Optional; add a title and set the width and height of the chart
+    var options = {'title':'Sale', 'width':550, 'height':400};
+  
+    // Display the chart inside the <div> element with id="piechart"
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    chart.draw(data, options);
+  }
+
+
+
+
+
+  function drawChartExpense() {
+    var data = google.visualization.arrayToDataTable([
+    ['Expense', 'Expense per Day'],
+          
+          ['Cost of Food Items', {{TotalGross}}],
+          ['Rent', {{Rent}}],
+          ['Electricity Bill', {{Electricity}}],
+          ['Total Salary Paid', {{TotalSalary}}],
+          ['Other Expenses', {{OtherExpense}}],
+  ]);
+  
+    // Optional; add a title and set the width and height of the chart
+    var options = {'title':'Expenses', 'width':550, 'height':400};
+  
+    // Display the chart inside the <div> element with id="piechart"
+    var chart = new google.visualization.PieChart(document.getElementById('piechartexpense'));
+    chart.draw(data, options);
+  }
+  </script>
+
+{% endblock %}
