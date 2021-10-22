@@ -1,0 +1,1 @@
+web: gunicorn farmeats.wsgi --log-file -
