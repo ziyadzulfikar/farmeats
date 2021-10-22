@@ -117,12 +117,21 @@ def register(request):
 # @login_required(login_url='/')
 def signout(request):
    try:
-      del request.session['username']
+      del request.session['id']
       logout(request)
    except:
-      print(request.session['username'])
+      print(request.session['id'])
       print("error")
    return redirect('/')
+
+def adminSignout(request):
+   try:
+      del request.session['id']
+      logout(request)
+   except:
+      print(request.session['id'])
+      print("error")
+   return redirect('adminHome')
 
 def adminLogin(request):
     if request.session.has_key('superuser')==True:
@@ -451,6 +460,15 @@ def expenses(request):
         expense = Expenses.objects.create(FoodItems=FoodItems, Rent=Rent, Electricity=Electricity, TotalSalary=TotalSalary, OtherExpense=OtherExpense, TotalExpense=TotalExpense, CurrentDate=CurrentDate)
         expense.save()  
         return redirect('adminHome')
+
+def dltPdt(request):
+    if(request.method == 'POST'):
+        pdtId = request.POST['pdtId'] 
+        if(Product.objects.filter(id = pdtId).exists()):
+            dlteThisUsers = Product.objects.filter(id = pdtId)  
+            dlteThisUsers.delete()
+    return redirect('adminHome') 
+
 
 def dlteUser(request):
     if(request.method == 'POST'):

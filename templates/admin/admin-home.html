@@ -121,11 +121,10 @@
               </div>
             </form>
         </div>
-
-
-
     </div>
 </div>
+
+
 <span id="products"></span>
 <div class="container mt-5 mb-5">
     <h3>Products</h3>
@@ -150,9 +149,9 @@
                 <td>{{products.description}}</td>
                 <td>{{products.offer}}</td>
                 <td>{{products.active}}</td>
-                <form action="dlteUser" method="post">
+                <form action="dltPdt" method="post">
                     {% csrf_token %}
-                    <input type="hidden" value="{{products.id}}" name="userId">
+                    <input type="hidden" value="{{products.id}}" name="pdtId">
                     <td><input type="submit" class="btn btn-success" value="Delete"></td>
                 </form>
             </tr>
@@ -163,7 +162,6 @@
 
 <span id="users"></span>
 <div class="container mt-5">
-    <a href="/" class="btn btn-info">Back to Home</a>
     <h3>Users</h3>
     <table id="table_id" class="display table">
         <thead class="table-success">
