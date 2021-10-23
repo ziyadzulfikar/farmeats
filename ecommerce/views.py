@@ -1,3 +1,4 @@
+from django import template
 from django.contrib.auth.models import User
 from django.http.response import JsonResponse
 from django.shortcuts import render,redirect
@@ -5,7 +6,137 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Cart, Comments, Expenses, Orders, Product, users
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+
+from django.http import HttpResponse
+from django.views.generic import View
+from django.template.loader import get_template
+
+from .utils import render_to_pdf
+
+class GeneratePdf(View):
+    def get(self, request, *args, **kwargs):
+        totalAmount = 0
+        orders = Orders.objects.filter(userId_id = request.session['id'], delivery="Not Delivered")
+        users = User.objects.get(id = request.session['id'])
+        for order in orders:
+            if order.userId_id == request.session['id']:
+                username = users.username
+                email = users.email
+                address = order.address
+                date = order.date
+                phone = order.phone
+                invoiceId = order.id
+                break
+        for order in orders:
+            totalAmount = totalAmount + order.price
+        template = get_template('invoice.html')
+        data = {
+            'invoice_id': 123, 
+            'customer_name': username,
+            'amount': totalAmount,
+            'date': date,
+            'orders' :orders, 
+            'email' :email,
+            'address' :address,
+            'phone' :phone,
+            'invoiceId' :invoiceId,
+        }
+        html = template.render(data)
+        pdf = render_to_pdf('invoice.html', data)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = "Invoice_%s.pdf" %("12341231")
+            content = "inline; filename='%s'" %(filename)
+            download = request.GET.get("download")
+            if download:
+                content = "attachment; filename='%s'" %(filename)
+            response['Content-Disposition'] = content
+            return response
+        return HttpResponse("Not found")
+# from django.http import FileResponse 
+# import io
+# from reportlab.pdfgen import canvas
+# from reportlab.lib.units import inch
+# from reportlab.lib.pagesizes import letter
+# from reportlab.platypus import SimpleDocTemplate
+# from reportlab.platypus import Table
+#  # add style
+# from reportlab.platypus import TableStyle
+# from reportlab.lib import colors
+
+
+# def printInvoice(request):
+#     # List of Lists
+#     data = [
+#         ['Dedicated Hosting', 'VPS Hosting', 'Sharing Hosting', 'Reseller Hosting' ],
+#         ['€200/Month', '€100/Month', '€20/Month', '€50/Month'],
+#         ['Free Domain', 'Free Domain', 'Free Domain', 'Free Domain'],
+#         ['2GB DDR2', '20GB Disc Space', 'Unlimited Email', 'Unlimited Email']
+#     ]
+
+#     fileName = 'pdfTable.pdf'
+
+    
+
+#     pdf = SimpleDocTemplate(
+#         fileName,
+#         pagesize=letter
+#     )
+
+    
+#     table = Table(data)
+
+   
+
+#     style = TableStyle([
+#         ('BACKGROUND', (0,0), (3,0), colors.green),
+#         ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke),
+
+#         ('ALIGN',(0,0),(-1,-1),'CENTER'),
+
+#         ('FONTNAME', (0,0), (-1,0), 'Courier-Bold'),
+#         ('FONTSIZE', (0,0), (-1,0), 14),
+
+#         ('BOTTOMPADDING', (0,0), (-1,0), 12),
+
+#         ('BACKGROUND',(0,1),(-1,-1),colors.beige),
+#     ])
+#     table.setStyle(style)
+
+#     # 2) Alternate backgroud color
+#     rowNumb = len(data)
+#     for i in range(1, rowNumb):
+#         if i % 2 == 0:
+#             bc = colors.burlywood
+#         else:
+#             bc = colors.beige
+        
+#         ts = TableStyle(
+#             [('BACKGROUND', (0,i),(-1,i), bc)]
+#         )
+#         table.setStyle(ts)
+
+#     # 3) Add borders
+#     ts = TableStyle(
+#         [
+#         ('BOX',(0,0),(-1,-1),2,colors.black),
+
+#         ('LINEBEFORE',(2,1),(2,-1),2,colors.red),
+#         ('LINEABOVE',(0,2),(-1,2),2,colors.green),
+
+#         ('GRID',(0,1),(-1,-1),2,colors.black),
+#         ]
+#     )
+#     table.setStyle(ts)
+
+#     elems = []
+#     elems.append(table)
+
+#     pdf.build(elems)
+
+    # return FileResponse(buf, as_attachment=True, filename='Invoice.pdf')
+
 
 # Create your views here.
 # @login_required(login_url='/login')
@@ -486,6 +617,14 @@ def dlteOrder(request):
             dlteOrder.delete()
     return redirect('adminHome') 
 
+def dlteOrderUser(request):
+    if(request.method == 'POST'):
+        orderId = request.POST['orderId'] 
+        if(Orders.objects.filter(id = orderId).exists()):
+            dlteOrder = Orders.objects.filter(id = orderId)  
+            dlteOrder.delete()
+    return redirect('myOrders') 
+
 def dlteComment(request):
     if(request.method == 'POST'):
         commentId = request.POST['commentId'] 
@@ -600,6 +739,8 @@ def successfulOrder(request):
                 if(paymentMethod == 'COD'):
                     order = Orders.objects.create(name=name, phone=phone, address=address, address2=address2, district=district, zip=zip, paymentMethod=paymentMethod, products=products, quantity=quantity, price=price, category=category, userId_id=userId, delivery=delivery, date=dat)
                     order.save()
+                    delte = Cart.objects.get(id=cartpdt.id)
+                    delte.delete()
                 else:
                     return render(request, 'paypal.html',{'cartValue':cartValue,'sessions':request.session,'name':name, 'phone':phone, 'address':address, 'address2':address2, 'district':district, 'zip':zip, 'paymentMethod':paymentMethod, 'products':products, 'quantity':quantity, 'price':price, 'category':category, 'userId_id':userId, 'delivery':delivery, 'date':dat, 'totalPrice':totalPrice})
             messages.info(request,'Your order is placed')

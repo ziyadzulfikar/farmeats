@@ -1,10 +1,12 @@
+from django.conf.urls import url
 from django.urls import path
 from . import views
+from .views import GeneratePdf
 
 urlpatterns = [
     path('', views.home, name = 'home'),
     path('login', views.signin, name = 'signin'),
-    path('register', views.register, name= 'register'),
+    path('register', views.register, name= 'register'), 
     path('logout', views.signout, name = 'signout'),
     path('adminlogout', views.adminSignout, name = 'adminSignout'),
     path('adminSignin', views.adminLogin, name = 'adminLogin'),
@@ -12,6 +14,7 @@ urlpatterns = [
     path('dltPdt', views.dltPdt, name = 'dltPdt'),
     path('dlteUser', views.dlteUser, name = 'dlteUser'),
     path('dlteOrder', views.dlteOrder, name = 'dlteOrder'),
+    path('dlteOrderUser', views.dlteOrderUser, name = 'dlteOrderUser'),
     path('dlteComment', views.dlteComment, name = 'dlteComment'),
     path('dlteExpense', views.dlteExpense, name = 'dlteExpense'),
     path('addProduct', views.addProduct, name = 'addProduct'),
@@ -28,4 +31,7 @@ urlpatterns = [
     path('myOrders', views.myOrders, name = 'myOrders'),
     path('comments', views.comments, name = 'comments'),
     path('delivery', views.delivery, name = 'delivery'),
+    url(r'^printInvoice/$',GeneratePdf.as_view())  
+    # path('pdf', views.GeneratePdf, name = 'GeneratePdf'),
+    # path('printInvoice', views.printInvoice, name = 'printInvoice'),
 ]

@@ -11,7 +11,7 @@
           <div class="col-md-4">
             <br>
             <br>
-            <form action="">
+            <form action="printInvoice">
                   <input type="hidden" name="user" value="{{orders.name}}">
                   <button class="btn btn-success" type="submit">Print Invoice</button>
                   <p><i>Note: Only Not Delivered items invoice will be printed</i></p>
@@ -37,9 +37,10 @@
                               <p class="card-text"><strong>Zip: </strong>{{orders.zip}}</p>
                               <p class="card-text"><strong>Payment Method: </strong>{{orders.paymentMethod}}</p>
                               
-                                  <button class="card-text btn btn-danger" style="border-radius:20px;"><strong>Delivery: </strong>{{orders.delivery}}</button>
-                                  <form action='' method="POST">
-                                        <input type="hidden" name="SI" value="{{orders.id}}">
+                                  <button class="card-text btn btn-success" style="border-radius:10px;"><strong>Delivery: </strong>{{orders.delivery}}</button>
+                                  <form action='dlteOrderUser' method="POST">
+                                      {% csrf_token %}
+                                        <input type="hidden" name="orderId" value="{{orders.id}}">
                                         <input class="btn btn-warning mt-4" type="submit" name="myOrderDlte" value="Delete" style="border-radius: 10px; color:white">
                                   </form> 
                           </div>

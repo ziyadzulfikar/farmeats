@@ -1,0 +1,81 @@
+<html>
+<head>
+<title></title>
+<link href="../../assets/css/style.css" type="text/css" rel="stylesheet" />
+<!-- Template loads the jsPDF and htmlcanvas library js -->
+<script src="../../node_modules/jspdf/dist/jspdf.umd.min.js"></script>
+<script type="text/javascript"
+    src="../../node_modules/html2canvas/dist/html2canvas.js"></script>
+</head>
+<body>
+    <div class="container" id="html-template">
+        <!-- invokes function to convert HTML invoice to PDF in JavaScript-->
+        <div class="text-right" style="font-size: large;">
+            <h1>Farmeats</h1>
+            <h3>23/219 Hayath Apartments East Jn,<br>
+            Kambanimukku, Malayamma <br>
+            Kattangal, Kerala 673601
+        </h3>
+            <h3>
+                Phone [+12345678]
+            </h3>
+            <hr>
+        </div>
+        <h3 style="font-size: large;">Customer details:</h3>
+        <div style="font-size: large;">
+            <div class="cus-label" style="color: #000; padding: 0px;">
+                Name: <span class="cus-field">{{customer_name}}</span>
+            </div>
+            <div class="cus-label">
+                Email: <span class="cus-field">{{email}}</span>
+            </div>
+            <div class="cus-label">
+                Phone Number: <span class="cus-field">{{phone}}</span>
+            </div>
+            <div class="cus-label">
+                Address: <span class="cus-field">{{address}}</span>
+            </div>
+        </div>
+        <div class="border-top text-left">
+            <div class="heading"></div>
+        </div>
+        <table class="invoice-tbl" style="font-size: large;">
+            <tr>
+                <td><b>Invoice number:</b> #{{invoiceId}}</td>
+            </tr>
+            <tr>
+                <td><b>Date: {{date}}</b></td>
+            </tr>
+        </table>
+        <br>
+        <div></div>
+        <div class="border-bottom">
+            <table class="items-tbl" style="font-size: x-large;" border="1">
+                <tr>
+                    <th colspan="5" style="padding: 4px 0 0 0;">Product</th>
+                    <th class="text-right" style="padding: 4px 0 0 0;">Quantity</th>
+                    <th class="text-right" style="padding: 4px 0 0 0;">Total</th>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="5"></td>
+                    <td class="text-right"> </td>
+                    <td class="text-right"> </td>
+                </tr>
+
+                {% for order in orders %}
+                <tr class="text-bold">
+                    <td class="text-right" colspan="5" style="padding: 4px 0 0 4px;">{{order.products}}</td>
+                    <td style="text-align: center; padding: 4px 0 0 0;">{{order.quantity}}</td>
+                    <td class="text-right" style="text-align: center; padding: 4px 0 0 0;">{{order.price}}</td>
+                </tr>
+                {% endfor %}
+            <tr class="text-bold">
+                    <td class="text-right" colspan="6" style="text-align: right;padding: 4px 4px 0 0;font-weight: bold;">Grand Total</td>
+                    <td class="text-right" style="text-align: center; padding: 4px 0 0 0;">{{amount}}</td>
+                </tr>
+            </table>
+        </div>
+        
+    <script></script>
+</body>
+</html>
