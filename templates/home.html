@@ -194,7 +194,7 @@
                       </div>
                       <center>
                         {% if sessions %}
-                        <form style="display:inline-block;" action="buy" method="POST" e  nctype="multipart/form-data">
+                        <form style="display:inline-block;" action="buy" method="POST" enctype="multipart/form-data">
                           {% csrf_token %}
                           <input type="hidden" name="ProductName" value="{{product.productname}}" >
                           <input type="hidden" name="Category" value="{{product.category}}" >

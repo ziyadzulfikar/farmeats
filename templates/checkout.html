@@ -42,7 +42,8 @@
         <div class="col-md-1"></div>
         <div class="col-md-6 col-lg-6 checkout-box">
           <h4 class="mb-3 mt-3">Billing address</h4>
-          <form class="needs-validation" action="successfulOrder.php">
+          <form class="needs-validation" action="buyNow" method="post">
+            {% csrf_token %}
             <div class="row g-3">
               <div class="col-sm-12">
                 <label for="fullName" class="form-label">Full name</label>
@@ -103,8 +104,10 @@
   
             <div class="my-3">
               <div class="form-check">
-                <input style="color: green" id="credit" name="paymentMethod" value="COD" type="radio" class="form-check-input" checked required>
-                <label class="form-check-label" for="credit">Cash on delivery</label>
+                <input id="credit" name="paymentMethod" value="COD" type="radio" class="form-check-input" required>
+                <label class="form-check-label" for="COD">Cash on delivery</label><br>
+                <input id="paypal" name="paymentMethod" value="PayPal" type="radio" class="form-check-input" required>
+                <label class="form-check-label" for="PayPal">PayPal</label>
               </div>
             </div>
   

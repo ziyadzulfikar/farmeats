@@ -674,6 +674,30 @@ def successfulOrder(request):
             return redirect('/')
         # (name,phone,address,address2,district,zip,paymentMethod,products,quantity,price,category,userId,delivery,date)
 
+def buyNow(request):
+    if(request.method == 'POST'):
+        name = request.POST['fullName']
+        phone = request.POST['phoneNumber']
+        address = request.POST['address']
+        address2 = request.POST['address2']
+        district = request.POST['district']
+        zip = request.POST['zip']
+        paymentMethod = request.POST['paymentMethod']
+        ProductName = request.POST['ProductName']
+        Quantity = request.POST['Quantity']
+        Price = request.POST['Price']
+        Category = request.POST['Category']
+        delivery = request.POST['delivery']
+        dat = date.today()
+        userId = request.session['id']
+        if(paymentMethod == 'COD'):
+            order = Orders.objects.create(name=name, phone=phone, address=address, address2=address2, district=district, zip=zip, paymentMethod=paymentMethod, products=ProductName, quantity=Quantity, price=Price, category=Category, userId_id=userId, delivery=delivery, date=dat)
+            order.save()
+        else:
+            return render(request, 'paypal.html',{'sessions':request.session,'name':name, 'phone':phone, 'address':address, 'address2':address2, 'district':district, 'zip':zip, 'paymentMethod':paymentMethod, 'products':ProductName, 'quantity':Quantity, 'price':Price, 'category':Category, 'userId_id':userId, 'delivery':delivery, 'date':dat, 'totalPrice':Price})
+        messages.info(request,'Your order is placed')
+        return redirect('/')
+
 @login_required(login_url='/login') 
 def thankyou(request):
     if(request.method == 'POST'):
@@ -701,6 +725,7 @@ def thankyou(request):
             {'success':True},
                 safe=False
         )
+
 
 @login_required(login_url='/login')  
 def myOrders(request):
