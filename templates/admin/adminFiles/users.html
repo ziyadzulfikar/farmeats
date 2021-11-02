@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h3>Users</h3>
+    <table id="table_id" class="display table">
+        <thead class="table-success">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for users in allUsers %}
+            {% if users.is_superuser %}
+            {% else %}
+            <tr>
+                <td>{{users.username}}</td>
+                <td>{{users.email}}</td>
+                <form action="dlteUser" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{users.id}}" name="userId">
+                    <td><input type="submit" class="btn btn-success" value="Delete"></td>
+                </form>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+{% endblock %}

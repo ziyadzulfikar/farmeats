@@ -54,88 +54,6 @@ class GeneratePdf(View):
             response['Content-Disposition'] = content
             return response
         return HttpResponse("Not found")
-# from django.http import FileResponse 
-# import io
-# from reportlab.pdfgen import canvas
-# from reportlab.lib.units import inch
-# from reportlab.lib.pagesizes import letter
-# from reportlab.platypus import SimpleDocTemplate
-# from reportlab.platypus import Table
-#  # add style
-# from reportlab.platypus import TableStyle
-# from reportlab.lib import colors
-
-
-# def printInvoice(request):
-#     # List of Lists
-#     data = [
-#         ['Dedicated Hosting', 'VPS Hosting', 'Sharing Hosting', 'Reseller Hosting' ],
-#         ['€200/Month', '€100/Month', '€20/Month', '€50/Month'],
-#         ['Free Domain', 'Free Domain', 'Free Domain', 'Free Domain'],
-#         ['2GB DDR2', '20GB Disc Space', 'Unlimited Email', 'Unlimited Email']
-#     ]
-
-#     fileName = 'pdfTable.pdf'
-
-    
-
-#     pdf = SimpleDocTemplate(
-#         fileName,
-#         pagesize=letter
-#     )
-
-    
-#     table = Table(data)
-
-   
-
-#     style = TableStyle([
-#         ('BACKGROUND', (0,0), (3,0), colors.green),
-#         ('TEXTCOLOR',(0,0),(-1,0),colors.whitesmoke),
-
-#         ('ALIGN',(0,0),(-1,-1),'CENTER'),
-
-#         ('FONTNAME', (0,0), (-1,0), 'Courier-Bold'),
-#         ('FONTSIZE', (0,0), (-1,0), 14),
-
-#         ('BOTTOMPADDING', (0,0), (-1,0), 12),
-
-#         ('BACKGROUND',(0,1),(-1,-1),colors.beige),
-#     ])
-#     table.setStyle(style)
-
-#     # 2) Alternate backgroud color
-#     rowNumb = len(data)
-#     for i in range(1, rowNumb):
-#         if i % 2 == 0:
-#             bc = colors.burlywood
-#         else:
-#             bc = colors.beige
-        
-#         ts = TableStyle(
-#             [('BACKGROUND', (0,i),(-1,i), bc)]
-#         )
-#         table.setStyle(ts)
-
-#     # 3) Add borders
-#     ts = TableStyle(
-#         [
-#         ('BOX',(0,0),(-1,-1),2,colors.black),
-
-#         ('LINEBEFORE',(2,1),(2,-1),2,colors.red),
-#         ('LINEABOVE',(0,2),(-1,2),2,colors.green),
-
-#         ('GRID',(0,1),(-1,-1),2,colors.black),
-#         ]
-#     )
-#     table.setStyle(ts)
-
-#     elems = []
-#     elems.append(table)
-
-#     pdf.build(elems)
-
-    # return FileResponse(buf, as_attachment=True, filename='Invoice.pdf')
 
 
 # Create your views here.
@@ -197,21 +115,28 @@ def signin(request):
         if(request.method == 'POST'):
             username = request.POST['username']
             password = request.POST['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                request.session['id'] = user.id
-                request.session['username'] = user.username
-                # cartValue = int(Cart.objects.filter(userId_id = user.id).count())
-                return JsonResponse(
-                    {'success':True},
-                    safe=False
-                )
+            if(User.objects.filter(username=username)):
+                username = User.objects.get(username=username)
+                user = authenticate(username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    request.session['id'] = user.id
+                    request.session['username'] = user.username
+                    # cartValue = int(Cart.objects.filter(userId_id = user.id).count())
+                    return JsonResponse( 
+                        {'success':True},
+                        safe=False
+                    )
+                else:
+                    return JsonResponse(
+                        {'success':False}, 
+                        safe=False
+                    )
             else:
                 return JsonResponse(
-                    {'success':False},
-                    safe=False
-                )
+                        {'success':False},
+                        safe=False
+                ) 
         else:
             return render(request, 'accounts/login.html')
 
@@ -233,10 +158,12 @@ def register(request):
                 return redirect('./register')
             else:
                 user = User.objects.create_user(username=name, email=email, password=password1)
-                request.session['id'] = user.id
-                request.session['username'] = user.username
-                # request.session['cartValue'] = int(Cart.objects.filter(userId_id = user.id).count())
                 user.save()
+                userUniq = authenticate(request, email=email, password=password1)
+                login(request, userUniq)
+                request.session['id'] = userUniq.id
+                request.session['email'] = userUniq.email
+                # request.session['cartValue'] = int(Cart.objects.filter(userId_id = user.id).count())
                 return redirect('/')
         else:
             print("Password not matching")
@@ -262,11 +189,11 @@ def adminSignout(request):
    except:
       print(request.session['id'])
       print("error")
-   return redirect('adminHome')
+   return redirect('adminAdd')
 
 def adminLogin(request):
     if request.session.has_key('superuser')==True:
-        return redirect('adminHome')
+        return redirect('adminAdd')
     else:
         if(request.method == 'POST'):
             username = request.POST['username']
@@ -296,62 +223,62 @@ def adminLogin(request):
         else:
             return render(request, 'admin/signin.html')
 
-def adminHome(request):
-    if request.session.has_key('superuser')==True:
-        allUsers = User.objects.all()
-        allProducts = Product.objects.all()
-        allOrders = Orders.objects.all()
-        allComments = Comments.objects.all()
-        Burger = 0
-        Shawarma = 0
-        Pizza = 0
-        FriedChicken = 0
-        Juice = 0
-        allExpenses = Expenses.objects.filter(CurrentDate = date.today())
-        allOrdersIncome = Orders.objects.filter(delivery = "Delivered", date = date.today())
-        allBurgerIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Burger")
-        allShawarmaIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Shawarma")
-        allPizzaIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Pizza")
-        allFriedChickenIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "FriedChicken")
-        allJuicesIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Juices")
-        for Burgers in allBurgerIncome:
-            Burger = Burger + Burgers.price
-        for Shawarmas in allShawarmaIncome:
-            Shawarma = Shawarma + Shawarmas.price
-        for Pizzas in allPizzaIncome:
-            Pizza = Pizza + Pizzas.price
-        for FriedChickens in allFriedChickenIncome:
-            FriedChicken = FriedChicken + FriedChickens.price
-        for Juices in allJuicesIncome:
-            Juice = Juice + Juices.price
-        TodayGrossExpense = Expenses.objects.filter(CurrentDate = date.today())
-        TodayTotalIncome = Orders.objects.filter(date = date.today(), delivery = "Delivered")
-        totalIncomeToday = 0
-        totalIncomeQuantity = 0
-        TotalGross = 0
-        Rent = 0
-        Electricity = 0
-        TotalSalary = 0
-        OtherExpense = 0
-        TotalExpense = 0
-        for totalIncome in allOrdersIncome:
-            totalIncomeToday = totalIncomeToday + totalIncome.price
-            totalIncomeQuantity = totalIncomeQuantity + totalIncome.quantity
-        for TodayExpense in TodayGrossExpense:
-            TotalGross = TotalGross+TodayExpense.FoodItems
-            Rent = Rent + TodayExpense.Rent 
-            Electricity = Electricity + TodayExpense.Electricity
-            TotalSalary = TotalSalary + TodayExpense.TotalSalary
-            OtherExpense = OtherExpense + TodayExpense.OtherExpense
-            TotalExpense = TotalExpense + TodayExpense.TotalExpense
-        TotalGrossProfit = totalIncomeToday - TotalGross
-        TotalNetProfit = totalIncomeToday - (TotalGross+Rent+Electricity+TotalSalary+OtherExpense)
-        if (User.objects.filter(is_superuser = True).exists()):
-            return render(request, 'admin/admin-home.html', {'session':request.session,'Juice':Juice,'FriedChicken':FriedChicken,'Pizza':Pizza,'Shawarma':Shawarma,'Burger':Burger,'TotalNetProfit':TotalNetProfit,'TotalGrossProfit':TotalGrossProfit,'totalIncomeQuantity':totalIncomeQuantity,'TodayTotalIncome':TodayTotalIncome ,'TotalExpense':TotalExpense ,'OtherExpense':OtherExpense ,'TotalSalary':TotalSalary ,'Electricity':Electricity ,'Rent':Rent ,'TotalGross':TotalGross ,'allUsers':allUsers,'allProducts':allProducts,'allOrders':allOrders, 'allComments':allComments,'allExpenses':allExpenses, 'totalIncomeToday':totalIncomeToday})
-        else:
-            return redirect('/adminSignin')
-    else:
-        return redirect('/adminSignin')
+# def adminAdd(request):
+#     if request.session.has_key('superuser')==True:
+#         allUsers = User.objects.all()
+#         allProducts = Product.objects.all()
+#         allOrders = Orders.objects.all()
+#         allComments = Comments.objects.all()
+#         Burger = 0
+#         Shawarma = 0
+#         Pizza = 0
+#         FriedChicken = 0
+#         Juice = 0
+#         allExpenses = Expenses.objects.filter(CurrentDate = date.today())
+#         allOrdersIncome = Orders.objects.filter(delivery = "Delivered", date = date.today())
+#         allBurgerIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Burger")
+#         allShawarmaIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Shawarma")
+#         allPizzaIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Pizza")
+#         allFriedChickenIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "FriedChicken")
+#         allJuicesIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Juices")
+#         for Burgers in allBurgerIncome:
+#             Burger = Burger + Burgers.price
+#         for Shawarmas in allShawarmaIncome:
+#             Shawarma = Shawarma + Shawarmas.price
+#         for Pizzas in allPizzaIncome:
+#             Pizza = Pizza + Pizzas.price
+#         for FriedChickens in allFriedChickenIncome:
+#             FriedChicken = FriedChicken + FriedChickens.price
+#         for Juices in allJuicesIncome:
+#             Juice = Juice + Juices.price
+#         TodayGrossExpense = Expenses.objects.filter(CurrentDate = date.today())
+#         TodayTotalIncome = Orders.objects.filter(date = date.today(), delivery = "Delivered")
+#         totalIncomeToday = 0
+#         totalIncomeQuantity = 0
+#         TotalGross = 0
+#         Rent = 0
+#         Electricity = 0
+#         TotalSalary = 0
+#         OtherExpense = 0
+#         TotalExpense = 0
+#         for totalIncome in allOrdersIncome:
+#             totalIncomeToday = totalIncomeToday + totalIncome.price
+#             totalIncomeQuantity = totalIncomeQuantity + totalIncome.quantity
+#         for TodayExpense in TodayGrossExpense:
+#             TotalGross = TotalGross+TodayExpense.FoodItems
+#             Rent = Rent + TodayExpense.Rent 
+#             Electricity = Electricity + TodayExpense.Electricity
+#             TotalSalary = TotalSalary + TodayExpense.TotalSalary
+#             OtherExpense = OtherExpense + TodayExpense.OtherExpense
+#             TotalExpense = TotalExpense + TodayExpense.TotalExpense
+#         TotalGrossProfit = totalIncomeToday - TotalGross
+#         TotalNetProfit = totalIncomeToday - (TotalGross+Rent+Electricity+TotalSalary+OtherExpense)
+#         if (User.objects.filter(is_superuser = True).exists()):
+#             return render(request, 'admin/adminFiles/adminAdd.html', {'session':request.session,'Juice':Juice,'FriedChicken':FriedChicken,'Pizza':Pizza,'Shawarma':Shawarma,'Burger':Burger,'TotalNetProfit':TotalNetProfit,'TotalGrossProfit':TotalGrossProfit,'totalIncomeQuantity':totalIncomeQuantity,'TodayTotalIncome':TodayTotalIncome ,'TotalExpense':TotalExpense ,'OtherExpense':OtherExpense ,'TotalSalary':TotalSalary ,'Electricity':Electricity ,'Rent':Rent ,'TotalGross':TotalGross ,'allUsers':allUsers,'allProducts':allProducts,'allOrders':allOrders, 'allComments':allComments,'allExpenses':allExpenses, 'totalIncomeToday':totalIncomeToday})
+#         else:
+#             return redirect('/adminSignin')
+#     else:
+#         return redirect('/adminSignin')
 
 def yesterdayIncome(request):
     if request.session.has_key('superuser')==True:
@@ -590,7 +517,7 @@ def expenses(request):
         CurrentDate = date.today()
         expense = Expenses.objects.create(FoodItems=FoodItems, Rent=Rent, Electricity=Electricity, TotalSalary=TotalSalary, OtherExpense=OtherExpense, TotalExpense=TotalExpense, CurrentDate=CurrentDate)
         expense.save()  
-        return redirect('adminHome')
+        return redirect('adminAdd')
 
 def dltPdt(request):
     if(request.method == 'POST'):
@@ -598,7 +525,7 @@ def dltPdt(request):
         if(Product.objects.filter(id = pdtId).exists()):
             dlteThisUsers = Product.objects.filter(id = pdtId)  
             dlteThisUsers.delete()
-    return redirect('adminHome') 
+    return redirect('adminAdd') 
 
 
 def dlteUser(request):
@@ -607,7 +534,7 @@ def dlteUser(request):
         if(User.objects.filter(id = userId).exists()):
             dlteThisUsers = User.objects.filter(id = userId)  
             dlteThisUsers.delete()
-    return redirect('adminHome') 
+    return redirect('adminAdd') 
 
 def dlteOrder(request):
     if(request.method == 'POST'):
@@ -615,7 +542,7 @@ def dlteOrder(request):
         if(Orders.objects.filter(id = orderId).exists()):
             dlteOrder = Orders.objects.filter(id = orderId)  
             dlteOrder.delete()
-    return redirect('adminHome') 
+    return redirect('adminAdd') 
 
 def dlteOrderUser(request):
     if(request.method == 'POST'):
@@ -631,7 +558,7 @@ def dlteComment(request):
         if(Comments.objects.filter(id = commentId).exists()):
             dlteComments = Comments.objects.filter(id = commentId)  
             dlteComments.delete()
-    return redirect('adminHome') 
+    return redirect('adminAdd') 
 
 def dlteExpense(request):
     if(request.method == 'POST'):
@@ -639,7 +566,7 @@ def dlteExpense(request):
         if(Expenses.objects.filter(id = expenseId).exists()):
             dlteComments = Expenses.objects.filter(id = expenseId)  
             dlteComments.delete()
-    return redirect('adminHome') 
+    return redirect('adminAdd') 
 
 def addProduct(request):
     if(request.method == 'POST'):
@@ -650,7 +577,7 @@ def addProduct(request):
         image = request.FILES['image']
         product = Product.objects.create(productname=pdtname, category=category, price=price, description=desc, image=image)
         product.save()
-        return redirect('adminHome') 
+        return redirect('adminAdd') 
 
 def addIncome(request):
     if(request.method == 'POST'):
@@ -663,7 +590,7 @@ def addIncome(request):
         delivery = request.POST['delivery']
         orders = Orders.objects.create(name="admin",products=ProductName, quantity=Quantity, price=price, category=category, delivery=delivery, date=CurrentDate, userId_id=user)
         orders.save()
-        return redirect('adminHome') 
+        return redirect('adminAdd') 
  
 def buy(request):
     if(request.method == 'POST'):
@@ -779,7 +706,7 @@ def thankyou(request):
 def myOrders(request):
     cartValue = int(Cart.objects.filter(userId_id = request.session['id']).count())
     if(Orders.objects.filter(userId_id = request.session['id'])):
-        orders = Orders.objects.all()
+        orders = Orders.objects.filter(userId_id = request.session['id'])
         return render(request, 'myOrder.html',{'cartValue':cartValue,'sessions':request.session,'AllOrders':orders,'session':request.session})
     else:
         messages.info(request,'Nothing to display in orders')
@@ -800,3 +727,129 @@ def comments(request):
     else:
         messages.info(request,'Sorry Some error occured')
         return redirect('/')
+
+def adminAdd(request):
+    if request.session.has_key('superuser')==True:
+        return render(request, 'admin/adminFiles/add.html')
+    else:
+        return redirect('/adminSignin')
+def adminProducts(request):
+    if request.session.has_key('superuser')==True:
+        allProducts = Product.objects.all()
+        return render(request, 'admin/adminFiles/products.html', {'session':request.session,'allProducts':allProducts})
+    else:
+        return redirect('/adminSignin')
+def adminUsers(request):
+    if request.session.has_key('superuser')==True:
+        allUsers = User.objects.all()
+        return render(request, 'admin/adminFiles/users.html', {'session':request.session,'allUsers':allUsers})
+    else:
+        return redirect('/adminSignin')
+def adminComments(request):
+    if request.session.has_key('superuser')==True:
+        allComments = Comments.objects.all()
+        return render(request, 'admin/adminFiles/comments.html', {'session':request.session, 'allComments':allComments})
+    else:
+        return redirect('/adminSignin')
+def adminOrders(request):
+    if request.session.has_key('superuser')==True:
+        allOrders = Orders.objects.all()
+        return render(request, 'admin/adminFiles/orders.html', {'session':request.session,'allOrders':allOrders})
+    else:
+        return redirect('/adminSignin')
+def adminStats(request):
+    if request.session.has_key('superuser')==True:
+        Burger = 0
+        Shawarma = 0
+        Pizza = 0
+        FriedChicken = 0
+        Juice = 0
+        allExpenses = Expenses.objects.filter(CurrentDate = date.today())
+        allOrdersIncome = Orders.objects.filter(delivery = "Delivered", date = date.today())
+        allBurgerIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Burger")
+        allShawarmaIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Shawarma")
+        allPizzaIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Pizza")
+        allFriedChickenIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "FriedChicken")
+        allJuicesIncome = Orders.objects.filter(delivery = "Delivered", date = date.today(), category = "Juices")
+        for Burgers in allBurgerIncome:
+            Burger = Burger + Burgers.price
+        for Shawarmas in allShawarmaIncome:
+            Shawarma = Shawarma + Shawarmas.price
+        for Pizzas in allPizzaIncome:
+            Pizza = Pizza + Pizzas.price
+        for FriedChickens in allFriedChickenIncome:
+            FriedChicken = FriedChicken + FriedChickens.price
+        for Juices in allJuicesIncome:
+            Juice = Juice + Juices.price
+        TodayGrossExpense = Expenses.objects.filter(CurrentDate = date.today())
+        TodayTotalIncome = Orders.objects.filter(date = date.today(), delivery = "Delivered")
+        totalIncomeToday = 0
+        totalIncomeQuantity = 0
+        TotalGross = 0
+        Rent = 0
+        Electricity = 0
+        TotalSalary = 0
+        OtherExpense = 0
+        TotalExpense = 0
+        for totalIncome in allOrdersIncome:
+            totalIncomeToday = totalIncomeToday + totalIncome.price
+            totalIncomeQuantity = totalIncomeQuantity + totalIncome.quantity
+        for TodayExpense in TodayGrossExpense:
+            TotalGross = TotalGross+TodayExpense.FoodItems
+            Rent = Rent + TodayExpense.Rent 
+            Electricity = Electricity + TodayExpense.Electricity
+            TotalSalary = TotalSalary + TodayExpense.TotalSalary
+            OtherExpense = OtherExpense + TodayExpense.OtherExpense
+            TotalExpense = TotalExpense + TodayExpense.TotalExpense
+        TotalGrossProfit = totalIncomeToday - TotalGross
+        TotalNetProfit = totalIncomeToday - (TotalGross+Rent+Electricity+TotalSalary+OtherExpense)
+        if (User.objects.filter(is_superuser = True).exists()):
+            return render(request, 'admin/adminFiles/stats.html', {'session':request.session,'Juice':Juice,'FriedChicken':FriedChicken,'Pizza':Pizza,'Shawarma':Shawarma,'Burger':Burger,'TotalNetProfit':TotalNetProfit,'TotalGrossProfit':TotalGrossProfit,'totalIncomeQuantity':totalIncomeQuantity,'TodayTotalIncome':TodayTotalIncome ,'TotalExpense':TotalExpense ,'OtherExpense':OtherExpense ,'TotalSalary':TotalSalary ,'Electricity':Electricity ,'Rent':Rent ,'TotalGross':TotalGross, 'allExpenses':allExpenses, 'totalIncomeToday':totalIncomeToday})
+        else:
+            return redirect('/adminSignin')
+    else:
+        return redirect('/adminSignin')
+
+def search(request):
+    if request.session.has_key('username'):
+        foodCategory = request.GET['foodCategory']
+        if(foodCategory == "All"):
+            products = Product.objects.all()
+            return render(request, 'home.html',{'products':products})
+        else:
+            products = Product.objects.filter(category = foodCategory)
+            return render(request, 'home.html',{'products':products})
+    else:
+        foodCategory = request.GET['foodCategory']
+        if(foodCategory == "All"):
+            products = Product.objects.all()
+            return render(request, 'home.html',{'products':products})
+        else:
+            products = Product.objects.filter(category = foodCategory)
+            return render(request, 'home.html',{'products':products})
+
+def searchbar(request):
+    if request.session.has_key('username'):
+        search = request.GET['search']
+        cartTotal = int(Cart.objects.filter(userId_id = request.session['id']).count())
+        if(Product.objects.filter(category__icontains = search)):
+            products = Product.objects.filter(category__icontains = search)
+            return render(request, 'home.html',{'sessions':request.session,'products':products,'cartTotal':cartTotal})
+        elif(Product.objects.filter(productname__icontains = search)):
+            products = Product.objects.filter(productname__icontains = search)
+            return render(request, 'home.html',{'sessions':request.session,'products':products,'cartTotal':cartTotal})
+        else:
+            messages.info(request,'No search found')
+            return redirect('/')
+            
+    else:
+        search = request.GET['search']
+        if(Product.objects.filter(category__icontains = search)):
+            products = Product.objects.filter(category__icontains = search)
+            return render(request, 'home.html',{'products':products})
+        elif(Product.objects.filter(productname__icontains = search)):
+            products = Product.objects.filter(productname__icontains = search)
+            return render(request, 'home.html',{'products':products})
+        else:
+            messages.info(request,'No search found')
+            return redirect('/')

@@ -23,13 +23,13 @@
           <div> 
             <a href="#" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span class="nav_logo-name">FarmEats</span> </a>
             <div class="nav_list"> 
-              <a href="./adminHome#" class="nav_link active"> <i class='bx bx-plus nav_icon'></i> <span class="nav_name">Dashboard</span> </a> 
-              <a href="./adminHome#products" class="nav_link"> <i class='bx bx-basket nav_icon'></i> <span class="nav_name">Products</span> </a> 
-              <a href="./adminHome#users" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Users</span> </a> 
-              <a href="./adminHome#comments" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Messages</span> </a> 
-              <a href="./adminHome#orders" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i> <span class="nav_name">Orders</span> </a> 
-              <a href="./adminHome#files" class="nav_link"> <i class='bx bx-folder nav_icon'></i> <span class="nav_name">Files</span> </a> 
-              <a href="./adminHome#stats" class="nav_link"> <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Stats</span> </a> 
+              <a href="adminAdd" class="nav_link active"> <i class='bx bx-plus nav_icon'></i> <span class="nav_name">Add</span> </a> 
+              <a href="adminProducts" id="products" class="nav_link"> <i class='bx bx-basket nav_icon'></i> <span class="nav_name">Products</span> </a> 
+              <a href="adminUsers" id="users" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Users</span> </a> 
+              <a href="adminComments" id="comments" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Messages</span> </a> 
+              <a href="adminOrders" id="orders" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i> <span class="nav_name">Orders</span> </a> 
+              <!-- <a href="./adminHome#files" id="files" class="nav_link"> <i class='bx bx-folder nav_icon'></i> <span class="nav_name">Files</span> </a>  -->
+              <a href="adminStats" id="stats" class="nav_link"> <i class='bx bx-bar-chart-alt-2 nav_icon'></i> <span class="nav_name">Stats</span> </a> 
             </div>
           </div> 
           <a href="adminlogout" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
@@ -39,6 +39,31 @@
 
 
     <script src="{% static 'admin/script.js'%}"></script>
+    <!-- <script>
+      $(document).ready(()=>{
+        $('#add').click(()=>{
+          var add = document.getElementById("add").innerHTML
+          console.log(add)
+          var data = {
+            'csrfmiddlewaretoken' : '{{csrf_token}}',
+            'add' : add,
+          }
+            $.ajax({
+              url:'adminAdd',
+              method:'POST',
+              data: data,
+              dataType: 'json',
+              success:function(data){
+                if(data.success){
+                  window.location.replace('adminHome')
+                }else{
+                  alert("Admin is not authenticated")
+                }
+              }
+            })
+          }
+      )
+    </script> -->
 
     <!-- Optional JavaScript; choose one of the two! -->
 

@@ -1,7 +1,7 @@
 {% extends "includes/userbase.html" %}
 {% load static %}
 {% block content %}
-    <div id="carouselExampleIndicators" style="margin-top: 10vh;" class="carousel slide" data-bs-ride="carousel">
+    <div id="carouselExampleIndicators" style="margin-top: 10vh; height: auto;" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -68,39 +68,39 @@
                     <center>
                       <hr>
                       <div>
-                        <form action="" method="get">
-                          <input type="hidden">
-                          <input href="./index.php#shop" type="submit" value="All" class="my-category-list-btn">
+                        <form action="search" method="GET">
+                          <input href="./#shop" type="hidden" name="foodCategory" value="All">
+                          <input id="search" type="submit" value="All" class="my-category-list-btn">
                         </form>
                       </div>
                       <div>
-                        <form action="" method="get">
+                        <form action="search" method="GET">
                           <input type="hidden" name="foodCategory" value="Burger">
-                          <input href="./index.php#shop" type="submit" value="Burger" name="foodName" class="my-category-list-btn">
+                          <input type="submit" value="Burger" class="my-category-list-btn">
                         </form>
                       </div>
                       <div>
-                      <form action="" method="get">
+                      <form action="search" method="GET">
                           <input type="hidden" name="foodCategory" value="Pizza">
-                          <input href="./index.php#shop" type="submit" value="Pizza" name="foodName" class="my-category-list-btn">
+                          <input type="submit" value="Pizza" class="my-category-list-btn">
                         </form>
                       </div>
                       <div>
-                        <form action="" method="get">
+                        <form action="search" method="GET">
                           <input type="hidden" name="foodCategory" value="Shawarma">
-                          <input href="./index.php#shop" type="submit" value="Shawarma" name="foodName" class="my-category-list-btn">
+                          <input type="submit" value="Shawarma" class="my-category-list-btn">
                         </form>
                       </div>
                       <div>
-                        <form action="" method="get">
+                        <form action="search" method="GET">
                           <input type="hidden" name="foodCategory" value="Fried Chicken">
-                          <input href="./index.php#shop" type="submit" value="Fried Chicken" name="foodName" class="my-category-list-btn">
+                          <input type="submit" value="Fried Chicken" class="my-category-list-btn">
                         </form>
                       </div>
                       <div>
-                        <form action="" method="get">
+                        <form action="search" method="GET">
                           <input type="hidden" name="foodCategory" value="Juices">
-                          <input href="./index.php#shop" type="submit" value="Juices" name="foodName" class="my-category-list-btn">
+                          <input type="submit" value="Juices" class="my-category-list-btn">
                         </form>
                       </div>
                     </center>
@@ -113,13 +113,13 @@
 
           <div class="col-md-8" style="margin-top: 5vh;">
             <!-- search bar -->
-            <div  id="shop" class="card my-shop-head-card">
+            <div id="shop" class="card my-shop-head-card">
                 <div class="card-body">
                   <center>
                     <div class="my-search-container">
-                      <form action="" method="GET">
+                      <form action="searchbar" method="GET">
                         <input class="my-search-container-input"  type="text" placeholder="Search.." name="search">
-                        <button class="my-btn-search" name="searchSubmit" type="submit"><i class="fa fa-search"></i></button>
+                        <button class="my-btn-search" type="submit"><i class="fa fa-search"></i></button>
                       </form>
                     </div>
                   </center>
@@ -410,6 +410,9 @@
                       }
                     })
             }
+            
+            
+
         </script>
         {% endblock %}
 

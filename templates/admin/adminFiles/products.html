@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h3>Products</h3>
+    <table id="table_products" class="display table">
+        <thead class="table-success">
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>offer</th>
+                <th>active</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for products in allProducts %}
+            <tr>
+                <td>{{products.productname}}</td>
+                <td>{{products.category}}</td>
+                <td>{{products.price}}</td>
+                <td>{{products.description}}</td>
+                <td>{{products.offer}}</td>
+                <td>{{products.active}}</td>
+                <form action="dltPdt" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{products.id}}" name="pdtId">
+                    <td><input type="submit" class="btn btn-success" value="Delete"></td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+{% endblock %}

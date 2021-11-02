@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h3>Comments</h3>
+    <table id="table_comments" class="display table">
+        <thead class="table-success">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Comments</th>
+                <th>User</th>
+                <th>UserId</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for comments in allComments %}
+            <tr>
+                <td>{{comments.name}}</td>
+                <td>{{comments.email}}</td>
+                <td>{{comments.phone}}</td>
+                <td>{{comments.comment}}</td>
+                <td>{{comments.user}}</td>
+                <td>{{comments.userId_id}}</td>
+                <form action="dlteComment" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{comments.id}}" name="commentId">
+                    <td><input type="submit" class="btn btn-success" value="Delete"></td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+{% endblock %}

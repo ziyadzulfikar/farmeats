@@ -1,6 +1,6 @@
 {% extends "includes/userbase.html" %}
 {% block content %}
-<div class="my-background">
+<div class="">
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-2"></div>
@@ -8,16 +8,17 @@
               {% for message  in messages %}
                 <p><strong>{{message}}</strong></p>
               {% endfor %}
-                <form class="my-form" action="login" method="POST">
+                <form class="my-form" method="POST">
                     {% csrf_token %}
                     <div class="container">
                         <div class="mb-3 pt-4">
                           <h3 class="text-success">Signin</h3>
                         </div>
                         <div class="mb-3">
-                          <label for="exampleInputEmail1" class="form-label">Email address</label>
-                          <input type="text" name="username" class="form-control" id="username" aria-describedby="emailHelp" required>
+                          <label for="exampleInputEmail1" class="form-label">Username</label>
+                          <input type="email" name="username" class="form-control" id="username" aria-describedby="emailHelp" required>
                           <div id="textError" style="color: red; font-style: italic; display: none;" class="pb-1">*Enter minimum 4 characters</div>
+                          <span style="font-size: small;"><i>Please make sure that you are using your <strong>username</strong> not <strong>email</strong></i></span>
                         </div>
                         <div class="mb-3">
                           <label for="exampleInputPassword1" class="form-label">Password</label>
@@ -41,9 +42,6 @@
   $(document).ready(()=>{
     $('#username').blur(function(){
       var text = $(this).val()
-      if(/^[a-zA-Z0-9- ]*$/.test(text) == false) {
-          alert('Your username contains illegal characters.');
-      }
       if(text.length<4){
         $("#textError").show()
       }else{
@@ -61,7 +59,6 @@
     $('#btnSubmit').click(()=>{
       var username = $('#username').val()
       var password = $('#password').val()
-      console.log(username,password)
       var data = {
         'csrfmiddlewaretoken' : '{{csrf_token}}',
         'username' : username,

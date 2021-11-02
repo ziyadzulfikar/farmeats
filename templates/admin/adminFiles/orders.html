@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Orders</h2>
+    <div class="row">
+        <div class="height-100 mt-5" style="overflow: auto;">
+        <!-- change height to increase the number of visible row  -->
+            <table id="table_orders" class="table table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone Number</th>
+                        <th>Address</th>
+                        <th>Address 2</th>
+                        <th>District</th>
+                        <th>Zip</th>
+                        <th>Payment Method</th>
+                        <th>ProductName</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>User</th>
+                        <th>Delivery</th>
+                        <th>Date</th>
+                        <th>Delivery Updation</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                {% for orders in allOrders %}
+                <tr>
+                    <td>{{orders.name}}</td>
+                    <td>{{orders.phone}}</td>
+                    <td>{{orders.address}}</td>
+                    <td>{{orders.address2}}</td>
+                    <td>{{orders.district}}</td>
+                    <td>{{orders.zip}}</td>
+                    <td>{{orders.paymentMethod}}</td>
+                    <td><button class="card-text btn btn-light"><strong>{{orders.products}}</strong></button></td>
+                    <td><button class="card-text btn btn-light"><strong>{{orders.quantity}}</strong></button></td>
+                    <td><button class="card-text btn btn-light"><strong>{{orders.price}}</strong></button></td>
+                    <td>{{orders.category}}</td>
+                    <td>{{orders.userId_id}}</td>
+                    <td><button class="card-text btn btn-success"><strong>{{orders.delivery}}</strong></button></td>
+                    <td>{{orders.date}}</td>
+                    <td>
+                                <form action='' method="POST">
+                                    <input type="hidden" name="SI" value="">
+                                    <input class="btn btn-primary mt-4" type="button" onclick="delivery('Packed','{{orders.id}}')" id="myOrderOnTheWay" value="Packed" style="border-radius: 10px; color:white">
+                                </form>
+                                    <form action='' method="POST">
+                                        <input type="hidden" name="SI" value="">
+                                        <input class="btn btn-success mt-4" type="button" onclick="delivery('Delivered','{{orders.id}}')" id="myOrderDelivered" value="Delivered" style="border-radius: 10px; color:white">
+                                    </form>
+                    </td>
+                    <td>
+                        <form action='dlteOrder' method="POST">
+                          {% csrf_token %}
+                            <input type="hidden" name="orderId" value="{{orders.id}}">
+                            <input class="btn btn-warning mt-4" type="submit" name="myOrderDlte" value="Delete" style="border-radius: 10px; color:white">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>  
+    </div>
+</div>
+{% endblock %}

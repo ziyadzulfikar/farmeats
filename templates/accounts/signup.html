@@ -1,6 +1,6 @@
 {% extends 'includes/userbase.html' %}
 {% block content %}
-<div class="my-background">
+<div class="">
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-2"></div>
@@ -15,10 +15,8 @@
                           <h3 class="text-success">Signup</h3>
                         </div>
                         <div class="mb-3">
-                          <label class="form-label">Name</label>
-                          <input type="text" id="username" name="name" class="form-control" required>
-                          <div id="textError" style="color: red; font-style: italic; display: none;" class="pb-1">*Enter minimum 4 characters</div>
-                          <div id="illegalError" style="color: red; font-style: italic; display: none;" class="pb-1">*Contains illegal characters</div>
+                          <label for="exampleInputEmail1" class="form-label">Email address</label>
+                          <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" required>
                         </div>
                         <div class="mb-3">
                           <label class="form-label">Phone Number</label>
@@ -27,8 +25,10 @@
                           <div id="phoneError2" style="color: red; font-style: italic; display: none;" class="pb-1">*Only 10 digits is required</div>
                         </div>
                         <div class="mb-3">
-                          <label for="exampleInputEmail1" class="form-label">Email address</label>
-                          <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" required>
+                          <label class="form-label">Username</label>
+                          <input type="text" id="username" name="name" class="form-control" required>
+                          <div id="textError" style="color: red; font-style: italic; display: none;" class="pb-1">*Enter minimum 4 characters</div>
+                          <div id="illegalError" style="color: red; font-style: italic; display: none;" class="pb-1">*Contains illegal characters</div>
                         </div>
                         <div class="mb-3">
                           <label for="exampleInputPassword1" class="form-label">Password</label>
