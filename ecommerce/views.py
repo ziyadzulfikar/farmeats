@@ -159,10 +159,10 @@ def register(request):
             else:
                 user = User.objects.create_user(username=name, email=email, password=password1)
                 user.save()
-                userUniq = authenticate(request, email=email, password=password1)
+                userUniq = authenticate(request, username=name, password=password1)
                 login(request, userUniq)
                 request.session['id'] = userUniq.id
-                request.session['email'] = userUniq.email
+                request.session['username'] = userUniq.username
                 # request.session['cartValue'] = int(Cart.objects.filter(userId_id = user.id).count())
                 return redirect('/')
         else:
