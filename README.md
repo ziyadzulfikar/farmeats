@@ -1,5 +1,3 @@
 # farmeats
-An ecommerce-app using django as backend
+An ecommerce-app using django.
 
-# Link to the website
-https://farmeats.herokuapp.com/
